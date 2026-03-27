@@ -70,83 +70,106 @@ class _WeatherPageState extends State<WeatherPage>
             Text("London, UK"),
         ],
     );
+    final media = MediaQuery.of(context);
+    final safeHeight = media.size.height - media.padding.top - media.padding.bottom;
+    final navBarHeight = 95.0; // appbar + safe area space
+    final maxCardHeight = safeHeight - navBarHeight - 20;
+
     return Scaffold
     (
       backgroundColor: const Color(0xFFE6EBF1),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-
-              const SizedBox(height: 65),
-
-              const Text
-                (
-                  "Weather Dashboard",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-
-              const SizedBox(height: 20),
-
-              // main card
-              Container
-              (
-                width: 520,
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration
-                (
-                  color: const Color(0xFFDCE2E8),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Column(
-                  children: [
-                    Row
-                      (
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Icon
-                            (
-                              Icons.wb_cloudy,
-                              size: 140,
-                              color: Colors.orange,
-                            ),
-                          column,
-                        ],
-                      ),
-
-                    const SizedBox(height: 10),
-                    
-                    // grid 
-                    Container
-                    (
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      const Text
                         (
-                          color: const Color(0xFFD0D7DF),
-                          borderRadius: BorderRadius.circular(20),
+                          "Weather Dashboard",
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                      child: GridView.count
+                      const SizedBox(height: 16),
+
+                      const SizedBox(height: 20),
+
+                      // main card
+                      ConstrainedBox
                       (
-                        crossAxisCount: 4,
-                        shrinkWrap: true,
-                        crossAxisSpacing: 15,
-                        mainAxisSpacing: 15,
-                        children: weatherForecast
-                            .map
+                        constraints: BoxConstraints
+                          (
+                            maxWidth: 520,
+                            maxHeight: maxCardHeight,
+                          ),
+                        child: Container
+                        (
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration
                             (
-                              (forecast) => buildBox
+                              color: const Color(0xFFDCE2E8),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row
                                 (
-                                  forecast["time"],
-                                  forecast["icon"],
-                                  forecast["temp"],
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Icon
+                                      (
+                                        Icons.wb_cloudy,
+                                        size: 110,
+                                        color: Colors.orange,
+                                      ),
+                                    column,
+                                  ],
                                 ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ],
+
+                            const SizedBox(height: 10),
+                            
+                              // grid 
+                              Container(
+                                padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 28),
+                                decoration: BoxDecoration
+                                  (
+                                    color: const Color(0xFFD0D7DF),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                child: GridView.count
+                                  (
+                                    crossAxisCount: 4,
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20,
+                                    children: weatherForecast.map
+                                    (
+                                      (forecast) => buildBox
+                                        (
+                                          forecast["time"],
+                                          forecast["icon"],
+                                          forecast["temp"],
+                                        ),
+                                    ).toList(),
+                                  ),
+                              ),
+
+                              const SizedBox(height: 12),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
+            ),
 
               // navigation
               Container
@@ -191,10 +214,7 @@ class _WeatherPageState extends State<WeatherPage>
                   ],
                 ),
               ),
-
-              const SizedBox(height: 15),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -214,10 +234,10 @@ class NavItem extends StatelessWidget
     this.icon,
     this.label,
     this.active, 
-    {
-    required this.onTap,
-    super.key,
-    }
+      {
+      required this.onTap,
+      super.key,
+      }
   );
   
 
@@ -249,7 +269,7 @@ class NavItem extends StatelessWidget
   }
 }
 
-// 
+
 Widget buildBox(String time, IconData icon, String temp) 
 {
   return Container
