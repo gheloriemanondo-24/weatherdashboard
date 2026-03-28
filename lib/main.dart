@@ -269,7 +269,7 @@ class NavItem extends StatelessWidget
   }
 }
 
-// 
+
 Widget buildBox(String time, IconData icon, String temp) 
 {
   return Container
