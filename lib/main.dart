@@ -70,6 +70,11 @@ class _WeatherPageState extends State<WeatherPage>
             Text("London, UK"),
         ],
     );
+    final media = MediaQuery.of(context);
+    final safeHeight = media.size.height - media.padding.top - media.padding.bottom;
+    final navBarHeight = 95.0; // appbar + safe area space
+    final maxCardHeight = safeHeight - navBarHeight - 20;
+
     return Scaffold
     (
       backgroundColor: const Color(0xFFE6EBF1),
@@ -77,65 +82,73 @@ class _WeatherPageState extends State<WeatherPage>
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 65, horizontal: 16),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Center(
                   child: Column(
                     children: [
+                      const SizedBox(height: 20),
                       const Text
                         (
                           "Weather Dashboard",
                           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
+                      const SizedBox(height: 16),
 
                       const SizedBox(height: 20),
 
                       // main card
-                      Container
+                      ConstrainedBox
                       (
-                        width: 520,
-                        padding: const EdgeInsets.all(22),
-                        decoration: BoxDecoration
+                        constraints: BoxConstraints
+                          (
+                            maxWidth: 520,
+                            maxHeight: maxCardHeight,
+                          ),
+                        child: Container
                         (
-                          color: const Color(0xFFDCE2E8),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Column(
-                          children: [
-                            Row
-                              (
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  const Icon
-                                    (
-                                      Icons.wb_cloudy,
-                                      size: 140,
-                                      color: Colors.orange,
-                                    ),
-                                  column,
-                                ],
-                              ),
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration
+                            (
+                              color: const Color(0xFFDCE2E8),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row
+                                (
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Icon
+                                      (
+                                        Icons.wb_cloudy,
+                                        size: 110,
+                                        color: Colors.orange,
+                                      ),
+                                    column,
+                                  ],
+                                ),
 
                             const SizedBox(height: 10),
                             
-                            // grid 
-                            Container
-                            (
-                              padding: const EdgeInsets.only(top: 32, left: 32, right: 32, bottom: 20),
-                              decoration: BoxDecoration
-                                (
-                                  color: const Color(0xFFD0D7DF),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              child: GridView.count
-                              (
-                                crossAxisCount: 4,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 15,
-                                children: weatherForecast
-                                    .map
+                              // grid 
+                              Container(
+                                padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 28),
+                                decoration: BoxDecoration
+                                  (
+                                    color: const Color(0xFFD0D7DF),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                child: GridView.count
+                                  (
+                                    crossAxisCount: 4,
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20,
+                                    children: weatherForecast.map
                                     (
                                       (forecast) => buildBox
                                         (
@@ -143,15 +156,15 @@ class _WeatherPageState extends State<WeatherPage>
                                           forecast["icon"],
                                           forecast["temp"],
                                         ),
-                                    )
-                                    .toList(),
+                                    ).toList(),
+                                  ),
                               ),
-                            ),
 
-                            const SizedBox(height: 20),
-                          ],
+                              const SizedBox(height: 12),
+                            ],
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -201,8 +214,6 @@ class _WeatherPageState extends State<WeatherPage>
                   ],
                 ),
               ),
-
-              const SizedBox(height: 15),
           ],
         ),
       ),
@@ -223,10 +234,10 @@ class NavItem extends StatelessWidget
     this.icon,
     this.label,
     this.active, 
-    {
-    required this.onTap,
-    super.key,
-    }
+      {
+      required this.onTap,
+      super.key,
+      }
   );
   
 
