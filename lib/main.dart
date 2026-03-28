@@ -74,79 +74,89 @@ class _WeatherPageState extends State<WeatherPage>
     (
       backgroundColor: const Color(0xFFE6EBF1),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-
-              const SizedBox(height: 65),
-
-              const Text
-                (
-                  "Weather Dashboard",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-
-              const SizedBox(height: 20),
-
-              // main card
-              Container
-              (
-                width: 520,
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration
-                (
-                  color: const Color(0xFFDCE2E8),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Column(
-                  children: [
-                    Row
-                      (
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Icon
-                            (
-                              Icons.wb_cloudy,
-                              size: 140,
-                              color: Colors.orange,
-                            ),
-                          column,
-                        ],
-                      ),
-
-                    const SizedBox(height: 10),
-                    
-                    // grid 
-                    Container
-                    (
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 65, horizontal: 16),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const Text
                         (
-                          color: const Color(0xFFD0D7DF),
-                          borderRadius: BorderRadius.circular(20),
+                          "Weather Dashboard",
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                      child: GridView.count
+
+                      const SizedBox(height: 20),
+
+                      // main card
+                      Container
                       (
-                        crossAxisCount: 4,
-                        shrinkWrap: true,
-                        crossAxisSpacing: 15,
-                        mainAxisSpacing: 15,
-                        children: weatherForecast
-                            .map
+                        width: 520,
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration
+                        (
+                          color: const Color(0xFFDCE2E8),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Column(
+                          children: [
+                            Row
+                              (
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Icon
+                                    (
+                                      Icons.wb_cloudy,
+                                      size: 140,
+                                      color: Colors.orange,
+                                    ),
+                                  column,
+                                ],
+                              ),
+
+                            const SizedBox(height: 10),
+                            
+                            // grid 
+                            Container
                             (
-                              (forecast) => buildBox
+                              padding: const EdgeInsets.only(top: 32, left: 32, right: 32, bottom: 20),
+                              decoration: BoxDecoration
                                 (
-                                  forecast["time"],
-                                  forecast["icon"],
-                                  forecast["temp"],
+                                  color: const Color(0xFFD0D7DF),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                            )
-                            .toList(),
+                              child: GridView.count
+                              (
+                                crossAxisCount: 4,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                crossAxisSpacing: 15,
+                                mainAxisSpacing: 15,
+                                children: weatherForecast
+                                    .map
+                                    (
+                                      (forecast) => buildBox
+                                        (
+                                          forecast["time"],
+                                          forecast["icon"],
+                                          forecast["temp"],
+                                        ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
+            ),
 
               // navigation
               Container
@@ -193,8 +203,7 @@ class _WeatherPageState extends State<WeatherPage>
               ),
 
               const SizedBox(height: 15),
-            ],
-          ),
+          ],
         ),
       ),
     );
